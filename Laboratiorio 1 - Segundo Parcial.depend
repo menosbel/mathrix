@@ -1,0 +1,72 @@
+# depslib dependency file v1.0
+1622930537 source:x:\tecnicatura en programacion\test\test\laboratiorio 1 - segundo parcial\functions.cpp
+	<iostream>
+	<stdio.h>
+	<conio.h>
+	<stdlib.h>
+	"header.h"
+
+1622930192 x:\tecnicatura en programacion\test\test\laboratiorio 1 - segundo parcial\header.h
+	<iostream>
+	<stdio.h>
+	<conio.h>
+	<stdlib.h>
+
+1622930207 source:x:\tecnicatura en programacion\test\test\laboratiorio 1 - segundo parcial\main.cpp
+	<iostream>
+	"header.h"
+
+1623616581 source:x:\tecnicatura en programacion\proyecto final laboratorio 1\laboratiorio 1 - segundo parcial\functions.cpp
+	<iostream>
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	<windows.h>
+	<time.h>
+	<algorithm>
+	<iterator>
+	"header.h"
+
+1623616468 x:\tecnicatura en programacion\proyecto final laboratorio 1\laboratiorio 1 - segundo parcial\header.h
+	<iostream>
+	<stdio.h>
+	<conio.h>
+	<stdlib.h>
+	<unistd.h>
+	<windows.h>
+
+1623616631 source:x:\tecnicatura en programacion\proyecto final laboratorio 1\laboratiorio 1 - segundo parcial\main.cpp
+	<iostream>
+	<windows.h>
+	"header.h"
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+
+1624114975 source:c:\users\belen\documents\cursos-dev\utn-labo1\parcial 2\ult version\laboratiorio 1 - segundo parcial\main.cpp
+	<iostream>
+	<windows.h>
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	"header.h"
+
+1624114973 c:\users\belen\documents\cursos-dev\utn-labo1\parcial 2\ult version\laboratiorio 1 - segundo parcial\header.h
+	<iostream>
+	<stdio.h>
+	<conio.h>
+	<stdlib.h>
+	<unistd.h>
+	<windows.h>
+
+1624114001 source:c:\users\belen\documents\cursos-dev\utn-labo1\parcial 2\ult version\laboratiorio 1 - segundo parcial\functions.cpp
+	<iostream>
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	<windows.h>
+	<time.h>
+	<algorithm>
+	<iterator>
+	"header.h"
+
