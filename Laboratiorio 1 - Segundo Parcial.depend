@@ -70,3 +70,30 @@
 	<iterator>
 	"header.h"
 
+1624201045 source:c:\users\belen\documents\cursos\laboratorio-i\mathrix\main.cpp
+	<iostream>
+	<windows.h>
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	"header.h"
+
+1624201028 c:\users\belen\documents\cursos\laboratorio-i\mathrix\header.h
+	<iostream>
+	<stdio.h>
+	<conio.h>
+	<stdlib.h>
+	<unistd.h>
+	<windows.h>
+
+1624195882 source:c:\users\belen\documents\cursos\laboratorio-i\mathrix\functions.cpp
+	<iostream>
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	<windows.h>
+	<time.h>
+	<algorithm>
+	<iterator>
+	"header.h"
+

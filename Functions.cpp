@@ -14,14 +14,14 @@ using namespace std;
 int menu()
 {
     cout<< " "                    << endl;
-    cout<<" MATHRIX"              <<endl;
+    cout<<" MATHRIX"              << endl;
     cout<<" --------------------" << endl;
     cout<<" 1 - JUGAR"            << endl;
     cout<<" 2 - ESTADISTICAS"     << endl;
     cout<<" 3 - CREDITOS"         << endl;
     cout<<" --------------------" << endl;
     cout<<" 0 - SALIR"            << endl;
-    cout << " "                   << endl;
+    cout<< " "                   << endl;
 }
 
 int creditos(){
@@ -53,7 +53,7 @@ int mostar_matrix(char matrix[6][6],int pilas, int points){
     bool first = true;
     int line = 1;
     system("cls");
-    cout<< " Vidas: "  << pilas << endl;
+    cout<< " Pilas: "  << pilas << endl;
     cout<< " Puntos: " << points << endl;
 
     cout << "" << endl;
@@ -96,40 +96,42 @@ int loading(){
  printf("\n");
 }
 
+int validar_accion_a_realizar(int accion){
+    int acciones[5] = {1, 2, 3, 0};
+    bool exists = std::find(std::begin(acciones), std::end(acciones), accion) != std::end(acciones);
 
-int ingresar_coordenadax(int coordenadax){
-    cout<< "Ingrese coordenada Inicial X [1 al 6]"<< endl;
-    cin>> coordenadax;
-    coordenadax = validar_movimientox(coordenadax);
-    return coordenadax;
-}
-
-
-int ingresar_coordenaday(int coordenaday){
-    cout<< "Ingrese coordenada Inicial Y [1 al 6]"<< endl;
-    cin>> coordenaday;
-    coordenaday = validar_movimientoy(coordenaday);
-    return coordenaday;
-}
-
-
-int validar_movimientox(int coordenadax){
-    while(coordenadax<1 || coordenadax>6){
-      cout<< "Coordenada "<< coordenadax << " fuera de rango" << endl;
-      cout<< "Ingrese nuevamente coordenada X"<< endl;
-      cin>> coordenadax;
+    while(!exists){
+        cout<<"Accion invalida. Ingrese otra: ";
+        cin>>operacion;
+        bool exists = std::find(std::begin(acciones), std::end(acciones), accion) != std::end(acciones);
     }
-    return coordenadax;
+    return accion;
 }
 
 
-int validar_movimientoy(int coordenaday){
-    while(coordenaday<1 || coordenaday>6){
-      cout<< "Coordenada "<< coordenaday << " fuera de rango" << endl;
-      cout<< "Ingrese nuevamente coordenada Y"<< endl;
-      cin>> coordenaday;
+int ingresar_coordenadaF(int coordenadaF){
+    cout<< "Ingrese la fila [1 al 6]"<< endl;
+    cin>> coordenadaF;
+    coordenadaF = validar_coordenada(coordenadaF);
+    return coordenadaF;
+}
+
+
+int ingresar_coordenadaC(int coordenadaC){
+    cout<< "Ingrese la columna [1 al 6]"<< endl;
+    cin>> coordenadaC;
+    coordenadaC = validar_coordenada(coordenadaC);
+    return coordenadaC;
+}
+
+
+int validar_coordenada(int coordenada){
+    while(coordenada<1 || coordenada>6){
+      cout<< "Coordenada "<< coordenada << " fuera de rango" << endl;
+      cout<< "Ingrese una nueva: "<< endl;
+      cin>> coordenada;
     }
-    return coordenaday;
+    return coordenada;
 }
 
 
@@ -156,211 +158,272 @@ int instruccion_de_operacion(){
     cout<<"Division(Resto)    -> %"<<endl;
 }
 
-int validar_posiciones(int coordenadax, int coordenaday, int desplazamiento, int pilas,char matrix[6][6], int points){
-    string value;
-    int newx=0,newy=0,acum=0,acum_aux=0;
-    bool good_move = true;
-    value = matrix[coordenadax][coordenaday];
-/*
-    if(value == "X"){
-
-            cout<< "La posicion seleccionada esta inhabilitada, pierdes una vida" << endl;
-            good_move = false;
-                    }
-*/
-    switch (desplazamiento){
-    //_______________________________________________________________________________________________
-                case 8:
-                    //first move [x-1][y]
-                    newx=coordenadax-1;
-                    value = matrix[newx][coordenaday];
-
-                    if(newx == '\0' || value == "X"){
-                        cout << "Posicion de dezplasamiento primaria invalida"<<endl;
-                        cout << "Pierdes una vida"<<endl;
-                        good_move = false;
-                    }
-
-                    if(good_move){
-                        //Second move [x-2][y]
-                        newx=newx-1;
-                        value = matrix[newx][coordenaday];
-                        if( newx == '\0' || value == "X"){
-                                cout << "Posicion de dezplasamiento secundaria invalida"<<endl;
-                                cout << "Pierdes una vida"<<endl;
-                                good_move = false;
-                        }
-                    }
-
-                    if(!good_move){
-                        pilas--;
-                    }
-                    return pilas;
-                    break;
-
-    //_______________________________________________________________________________________________
-                case 2:
-                    //first move [x-1][y]
-                    newx = coordenadax+1;
-                    value = matrix[newx][coordenaday];
-
-                    if( newx == '\0' || value == "X"){
-                        cout << "Posicion de dezplasamiento primaria invalida"<<endl;
-                        cout << "Pierdes una vida"<<endl;
-
-                        good_move = false;
-                    }
-
-                    if(good_move == true){
-                        //Second move [x-2][y]
-                        newx = newx+1;
-                        value = matrix[newx][coordenaday];
-                        if( newx == '\0' || value == "X"){
-                            cout << "Posicion de dezplasamiento secundaria invalida"<<endl;
-                            cout << "Pierdes una vida"<<endl;
-                            good_move = false;
-                        }
-                    }
-
-                    if(!good_move){
-                        pilas--;
-                    }
-
-                    return pilas;
-                    break;
-
-    //_______________________________________________________________________________________________
-                case 4:
-                    //First move [x][y-1]
-                    newy = coordenaday-1;
-                    value = matrix[coordenadax][newy];
-
-                    if( newx == '\0' || value == "X"){
-                        cout << "Posicion de dezplasamiento primaria invalida"<<endl;
-                        cout << "Pierdes una vida"<<endl;
-                        good_move = false;
-                    }
-
-                    if(good_move == true){
-                        //Second move [x][y-2]
-                        newx = newx-1;
-                        value = matrix[coordenadax][newy];
-                        if( newx == '\0' || value == "X"){
-                            cout << "Posicion de dezplasamiento secundaria invalida"<<endl;
-                            cout << "Pierdes una vida"<<endl;
-                            good_move = false;
-                        }
-                    }
-
-                    if(!good_move){
-                        pilas--;
-                    }
-
-                    return pilas;
-                    break;
-
-    //_______________________________________________________________________________________________
-                case 6:
-                    //First move [x][y+1]
-                    newy=coordenaday+1;
-                    value = matrix[coordenadax][newy];
-
-                    if( newx == '\0' || value == "X"){
-                        cout << "Posicion de dezplasamiento primaria invalida"<<endl;
-                        cout << "Pierdes una vida"<<endl;
-
-                        good_move = false;
-                    }
-
-                    if(good_move == true){
-                        //Second move [x][y-2]
-                        newx = newx+1;
-                        value = matrix[coordenadax][newy];
-                        if( newx == '\0' || value == "X"){
-                            cout << "Posicion de dezplasamiento secundaria invalida"<<endl;
-                            cout << "Pierdes una vida"<<endl;
-                            good_move = false;
-                        }
-                    }
-
-                    if(!good_move){
-                        pilas--;
-                    }
-
-                    return pilas;
-                    break;
+string traducir_movimiento(char movimiento){
+    switch(movimiento){
+        case 8:
+            return "Arriba";
+        case 2:
+            return "Abajo";
+        case 4:
+            return "Izquierda";
+        case 6:
+            return "Derecha";
     }
 }
 
 
-int get_points(int points, char matrix[6][6], int coordenadax, int coordenaday, int desplazamiento){
-    int newx=0, newy=0, acum = 0 , acum_aux=0;
+int validar_posiciones(int coordenadaF, int coordenadaC, int desplazamiento, int pilas,char matrix[6][6], int points){
     string value;
+    int newF=0,newC=0,acum=0,acum_aux=0;
+    bool good_move = true;
+    value = matrix[coordenadaF][coordenadaC];
+
     switch (desplazamiento){
         case 8:
-            acum = points;
-            cout << "Acum: " << acum << endl;
-            acum_aux = matrix[coordenadax][coordenaday] - '0';
-            acum += acum_aux;
-            matrix[coordenadax][coordenaday] = 'X';
-            cout << "Num: " << acum_aux << endl;
-            cout << "Acum: " << acum << endl;
+            //first move [x-1][y]
+            newF=coordenadaF - 1;
+            value = matrix[newF][coordenadaC];
 
-            //First move [x-1][y]
-            newx=coordenadax - 1;
-            acum_aux = matrix[newx][coordenaday] - '0';
-            acum += acum_aux;
-            matrix[newx][coordenaday] = 'X';
-            cout << "Num: " << acum_aux <<endl;
-            cout << "Acum: " << acum << endl;
+            if(newF == '\0' || value == "X"){
+                good_move = false;
+            }
 
-            //Second move [x-2][y]
-            newx=coordenadax - 2;
-            acum_aux = matrix[newx][coordenaday] - '0';
-            matrix[newx][coordenaday] = 'X';
-            acum += acum_aux;
-            cout << "Num: " << acum_aux << endl;
-            cout << "Acum: " << acum << endl;
+            if(good_move){
+                //Second move [x-2][y]
+                newF=newF-1;
+                value = matrix[newF][coordenadaC];
+                if( newF == '\0' || value == "X"){
+                    good_move = false;
+                }
+            }
 
-            points = acum;
-            cout << "Points: " << points << endl;
-            return points;
+            if(!good_move){
+                pilas--;
+            }
+            return pilas;
+            break;
+
+        case 2:
+            //first move [x+1][y]
+            newF = coordenadaF + 1;
+            value = matrix[newF][coordenadaC];
+
+            if( newF == '\0' || value == "X"){
+                good_move = false;
+            }
+
+            if(good_move == true){
+                //Second move [x+2][y]
+                newF = newF + 1;
+                value = matrix[newF][coordenadaC];
+                if( newF == '\0' || value == "X"){
+                    good_move = false;
+                }
+            }
+
+            if(!good_move){
+                pilas--;
+            }
+
+            return pilas;
             break;
 
         case 4:
-            acum = points;
-            acum_aux = matrix[coordenadax][coordenaday] - '0';
-            acum = acum + acum_aux;
-            matrix[coordenadax][coordenaday] = 'X';
-            //Firs25-t move [x][y-1]
-            newy=coordenaday-1;
-            acum_aux = matrix[coordenadax][newy] - '0';
-            acum = acum + acum_aux;
-            matrix[coordenadax][newy] = 'X';
-            //Second move [x][y-2]
-            newx--;
-            acum_aux = matrix[coordenadax][newy] - '0';
-            acum = acum + acum_aux;
-            matrix[coordenadax][newy] = 'X';
-            points = acum;
+            //First move [x][y-1]
+            newC = coordenadaC - 1;
+            value = matrix[coordenadaF][newC];
+
+            if( newC == '\0' || value == "X"){
+                good_move = false;
+            }
+
+            if(good_move == true){
+                //Second move [x][y-2]
+                newC = newC - 1;
+                value = matrix[coordenadaF][newC];
+                if( newC == '\0' || value == "X"){
+                    good_move = false;
+                }
+            }
+
+            if(!good_move){
+                pilas--;
+            }
+
+            return pilas;
+            break;
+
+        case 6:
+            //First move [x][y+1]
+            newC=coordenadaC + 1;
+            value = matrix[coordenadaF][newC];
+
+            if( newC == '\0' || value == "X"){
+                good_move = false;
+            }
+
+            if(good_move == true){
+                //Second move [x][y-2]
+                newC = newC + 1;
+                value = matrix[coordenadaF][newC];
+                if( newC == '\0' || value == "X"){
+                    good_move = false;
+                }
+            }
+
+            if(!good_move){
+                pilas--;
+            }
+
+            return pilas;
+            break;
+    }
+}
+
+int suma(int num1, int num2){
+    int res;
+    res = num1 + num2;
+    return res;
+}
+
+int resta(int num1, int num2){
+    int res;
+    res = num1 - num2;
+    return res;
+}
+
+int multiplicacion(int num1, int num2){
+    int res;
+    res = num1 * num2;
+    return res;
+}
+
+int division(int num1, int num2){
+    int res;
+    res = num1 / num2;
+    return res;
+}
+
+int resto(int num1, int num2){
+    int res;
+    res = num1 % num2;
+    return res;
+}
+
+
+int do_the_math(int num1, int num2, char operacion){
+    int res=0;
+    switch(operacion){
+    case '+':
+        res = suma(num1, num2);
+        break;
+    case '-':
+        res = resta(num1, num2);
+        break;
+    case '*':
+        res = multiplicacion(num1, num2);
+    case '/':
+        res = division(num1, num2);
+    case '%':
+        res = resto(num1, num2);
+    }
+    return res;
+}
+
+
+int get_points(int points, int &pilas, char matrix[6][6], int coordenadaF, int coordenadaC, int desplazamiento, char operacion){
+    int newCoor=0, newCoorRes=0, acum = 0 , num1=0, num2=0, result=0, res;
+    string value;
+    acum = points;
+    num1 = matrix[coordenadaF][coordenadaC] - '0';
+
+    switch (desplazamiento){
+        case 8: // arriba
+            newCoor=coordenadaF - 1;
+            num2 = matrix[newCoor][coordenadaC] - '0';
+
+            newCoorRes=coordenadaF - 2;
+            result = matrix[newCoorRes][coordenadaC] - '0';
+
+            res = do_the_math(num1, num2, operacion);
+
+            if (result == res){
+                matrix[coordenadaF][coordenadaC] = 'X';
+                matrix[newCoor][coordenadaC] = 'X';
+                matrix[newCoorRes][coordenadaC] = 'X';
+                points = acum + num1 + num2 + result;
+                cout << "El resultado es correcto. Sumaste " << points << " puntos!" << endl;
+            } else {
+                cout << "Resultado incorrecto. Perdieste una pila" << endl;
+                pilas --;
+            }
+
             return points;
             break;
-        case 6:
-            acum = points;
-            acum_aux = matrix[coordenadax][coordenaday] - '0';
-            acum = acum + acum_aux;
-            matrix[coordenadax][coordenaday] = 'X';
-            //First move [x][y-1]
-            newy=coordenaday+1;
-            acum_aux = matrix[coordenadax][newy] - '0';
-            acum = acum + acum_aux;
-            matrix[coordenadax][newy] = 'X';
-            //Second move [x][y-2]
-            newx++;
-            acum_aux = matrix[coordenadax][newy] - '0';
-            acum = acum + acum_aux;
-            matrix[coordenadax][newy] = 'X';
-            points = acum;
+
+        case 2: // abajo
+            newCoor=coordenadaF + 1;
+            num2 = matrix[newCoor][coordenadaC] - '0';
+
+            newCoorRes=coordenadaF + 2;
+            result = matrix[newCoorRes][coordenadaC] - '0';
+
+            res = do_the_math(num1, num2, operacion);
+
+            if (result == res){
+                matrix[coordenadaF][coordenadaC] = 'X';
+                matrix[newCoor][coordenadaC] = 'X';
+                matrix[newCoorRes][coordenadaC] = 'X';
+                points = acum + num1 + num2 + result;
+            } else {
+                cout << "Resultado incorrecto. Perdiste una pila" << endl;
+                pilas --;
+            }
+
+            return points;
+            break;
+
+        case 4: // izquierda
+            newCoor = coordenadaC - 1;
+            num2 = matrix[coordenadaF][newCoor] - '0';
+
+            newCoorRes = coordenadaC - 2;
+            result = matrix[coordenadaF][newCoorRes];
+
+            res = do_the_math(num1, num2, operacion);
+
+            if (result == res){
+                matrix[coordenadaF][coordenadaC] = 'X';
+                matrix[coordenadaF][newCoor] = 'X';
+                matrix[coordenadaF][newCoorRes] = 'X';
+                points = acum + num1 + num2 + result;
+            } else {
+                cout << "Resultado incorrecto. Perdiste una pila" << endl;
+                pilas --;
+            }
+
+            return points;
+            break;
+
+        case 6: // derecha
+            newCoor = coordenadaC + 1;
+            num2 = matrix[coordenadaF][newCoor] - '0';
+
+            newCoorRes = coordenadaC + 2;
+            result = matrix[coordenadaF][newCoorRes] - '0';
+
+            res = do_the_math(num1, num2, operacion);
+
+            if(result == res){
+                matrix[coordenadaF][coordenadaC] = 'X';
+                matrix[coordenadaF][newCoor] = 'X';
+                matrix[coordenadaF][newCoorRes] = 'X';
+                points = acum + num1 + num2 + result;
+            } else {
+                cout << "Resultado incorrecto. Perdiste una pila" << endl;
+                pilas --;
+            }
+
             return points;
             break;
     }
@@ -372,8 +435,9 @@ int validar_movimiento(int desplazamiento){
     bool exists = std::find(std::begin(desplazamientos), std::end(desplazamientos), desplazamiento) != std::end(desplazamientos);
 
     while(!exists){
-        cout<<"Ingrese nuevamente direccion de desplazamiento" << endl;
+        cout<<"Ingrese una direccion de desplazamiento valida: ";
         cin>>desplazamiento;
+        cout << endl;
         exists = std::find(std::begin(desplazamientos), std::end(desplazamientos), desplazamiento) != std::end(desplazamientos);
      }
     return desplazamiento;
