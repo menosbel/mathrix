@@ -7,9 +7,11 @@
 #include <algorithm>
 #include <iterator>
 #include "header.h"
+#include "rlutil.h"
+
 using namespace std;
 
-void bienvenida(string &name, char calculadora[20], int pilas, int aux_pilas, int points, int round){
+void bienvenida(string &name, char calculadora[20], int &pilas, int &aux_pilas, int &points, int &round){
     pilas = 3;
     aux_pilas = 3;
     points = 0;
@@ -19,13 +21,13 @@ void bienvenida(string &name, char calculadora[20], int pilas, int aux_pilas, in
     cin >> name;
     cout << "Modelo favorito de calculadora: ";
     cin >> calculadora;
-    system("cls");
+    rlutil::cls();
     cout << "Hola, " << name << endl << endl;
     cout << "-----------------------------------" << endl;
     cout << "       Bienvenidx a MATHRIX        " << endl;
     cout << "-----------------------------------" << endl << endl;
     cout << "Let the game begin..." << endl << endl;
-    system("pause");
+    rlutil::anykey();
 }
 
 
@@ -52,7 +54,7 @@ void obtener_mayor_puntaje(string nombre_mayor_puntaje, int mayor_puntaje){
         cout << "Nadie ha logrado hacer puntos en MATHRIX aun." << endl;
         cout << "Animate a intentarlo..." << endl << endl;
     }
-    system("pause");
+    rlutil::anykey();
 }
 
 
@@ -85,7 +87,7 @@ int cargar_matrix(char matrix[6][6]){
 int mostar_matrix(char matrix[6][6],int pilas, int points, string name, int round){
     bool first = true;
     int line = 1;
-    system("cls");
+    rlutil::cls();
     cout<< " Jugador/a: " << name << endl;
     cout<< " Ronda: " << round << endl;
     cout<< " Pilas: "  << pilas << endl;
@@ -156,10 +158,12 @@ void ingresar_coordenadas(int &coordenadaF, int &coordenadaC, char matrix[6][6],
         char selected_number = matrix[coordenadaF][coordenadaC];
         valid_number = validar_numero_seleccionado(selected_number);
         if (!valid_number) {
+            rlutil::setColor(rlutil::RED);
             cout << "No podes seleccionar una coordenada con una X. Perdes una pila" << endl << endl;
+            rlutil::setColor(rlutil::WHITE);
             pilas --;
-            system("pause");
-            system("cls");
+            rlutil::anykey();
+            rlutil::cls();
             ingresar_coordenadas(coordenadaF, coordenadaC, matrix, pilas, points, name, round);
         }
     }
@@ -184,9 +188,10 @@ int ingresar_coordenadaC(int coordenadaC){
 
 int validar_coordenada(int coordenada){
     while(coordenada<1 || coordenada>6){
-      cout<< "Coordenada "<< coordenada << " fuera de rango" << endl;
-      cout<< "Ingrese una nueva: "<< endl;
-      cin>> coordenada;
+      cout << "Coordenada "<< coordenada << " fuera de rango" << endl;
+      cout << "Ingrese una nueva: ";
+      cin >> coordenada;
+      cout << endl;
     }
     return coordenada;
 }
@@ -204,24 +209,27 @@ void instruccion_de_desplazamiento(){
     cout<<"8 - Arriba"<<endl;
     cout<<"2 - Abajo"<<endl;
     cout<<"4 - Izquierda"<<endl;
-    cout<<"6 - Derecha"<<endl;
+    cout<<"6 - Derecha"<<endl << endl;
 }
 
 int ingresar_desplazamiento(int coordenadaF,  int coordenadaC,  int desplazamiento){
     cout<<"Hacia donde te queres mover?" << endl;
     instruccion_de_desplazamiento();
-    cin>> desplazamiento;
+    cout << "Ingresa una direccion de desplazamiento: ";
+    cin >> desplazamiento;
+    cout << endl;
     desplazamiento = validar_movimiento(desplazamiento);
-    cout<<"Validando input..." << endl;
+    cout<<"Validando input..." << endl << endl;
     return desplazamiento;
 }
 
 char ingresar_operacion(char operacion){
     instruccion_de_operacion();
-    cin>> operacion;
+    cout << "Ingresa una operacion: ";
+    cin >> operacion;
+    cout << endl;
     operacion = validar_operacion(operacion);
-    cout<< "Operacion elegida: " << operacion << endl;
-    cout<<"Validando operacion..." << endl;
+    cout<<"Validando operacion..." << endl << endl;
     return operacion;
 }
 
@@ -231,7 +239,7 @@ void instruccion_de_operacion(){
     cout<<"Resta              -> -"<<endl;
     cout<<"Multiplicacion     -> *"<<endl;
     cout<<"Division(Cociente) -> /"<<endl;
-    cout<<"Division(Resto)    -> %"<<endl;
+    cout<<"Division(Resto)    -> %"<<endl << endl;
 }
 
 string traducir_desplazamiento(int desplazamiento){
@@ -424,12 +432,14 @@ int get_points(int points, int &pilas, char matrix[6][6], int coordenadaF, int c
                 points = acum + num1 + num2 + result;
                 int points_round;
                 points_round = points - acum;
+                rlutil::setColor(rlutil::GREEN);
                 cout << "El resultado es correcto. Sumaste " << points_round << " puntos!" << endl << endl;
             } else {
+                rlutil::setColor(rlutil::RED);
                 cout << "Resultado incorrecto. Perdiste una pila" << endl << endl;
                 pilas --;
             }
-
+            rlutil::setColor(rlutil::WHITE);
             return points;
             break;
 
@@ -449,12 +459,14 @@ int get_points(int points, int &pilas, char matrix[6][6], int coordenadaF, int c
                 points = acum + num1 + num2 + result;
                 int points_round;
                 points_round = points - acum;
+                rlutil::setColor(rlutil::GREEN);
                 cout << "El resultado es correcto. Sumaste " << points_round << " puntos!" << endl << endl;
             } else {
+                rlutil::setColor(rlutil::RED);
                 cout << "Resultado incorrecto. Perdiste una pila." << endl << endl;
                 pilas --;
             }
-
+            rlutil::setColor(rlutil::WHITE);
             return points;
             break;
 
@@ -474,12 +486,14 @@ int get_points(int points, int &pilas, char matrix[6][6], int coordenadaF, int c
                 points = acum + num1 + num2 + result;
                 int points_round;
                 points_round = points - acum;
+                rlutil::setColor(rlutil::GREEN);
                 cout << "El resultado es correcto. Sumaste " << points_round << " puntos!" << endl << endl;
             } else {
+                rlutil::setColor(rlutil::RED);
                 cout << "Resultado incorrecto. Perdiste una pila." << endl << endl;
                 pilas --;
             }
-
+            rlutil::setColor(rlutil::WHITE);
             return points;
             break;
 
@@ -499,12 +513,14 @@ int get_points(int points, int &pilas, char matrix[6][6], int coordenadaF, int c
                 points = acum + num1 + num2 + result;
                 int points_round;
                 points_round = points - acum;
+                rlutil::setColor(rlutil::GREEN);
                 cout << "El resultado es correcto. Sumaste " << points_round << " puntos!" << endl << endl;
             } else {
+                rlutil::setColor(rlutil::RED);
                 cout << "Resultado incorrecto. Perdiste una pila." << endl << endl;
                 pilas --;
             }
-
+            rlutil::setColor(rlutil::WHITE);
             return points;
             break;
     }
@@ -530,8 +546,9 @@ char validar_operacion(char operacion){
     bool exists = std::find(std::begin(operaciones), std::end(operaciones), operacion) != std::end(operaciones);
 
     while(!exists){
-        cout<<"Ingrese nuevamente la operacion" << endl;
+        cout<<"Ingrese una operacion valida: ";
         cin>>operacion;
+        cout << endl;
         exists = std::find(std::begin(operaciones), std::end(operaciones), operacion) != std::end(operaciones);
     }
     return operacion;

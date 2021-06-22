@@ -8,7 +8,7 @@
 #include <windows.h>
 using namespace std;
 
-void bienvenida(string &name, char calculadora[20], int pilas, int aux_pilas, int points, int round);
+void bienvenida(string &name, char calculadora[20], int &pilas, int &aux_pilas, int &points, int &round);
 void menu();
 int validar_accion_a_realizar(int accion);
 

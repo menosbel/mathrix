@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "header.h"
+#include "rlutil.h"
+
 using namespace std;
 unsigned int microsecond = 1000000;
 int accion = 99, coordenadaF = 0, coordenadaC = 0, desplazamiento;
@@ -16,7 +18,7 @@ int mayor_puntaje=0;
 int main()
 {
     while(accion != 0){
-        system("cls");
+        rlutil::cls();
         menu();
 
         cout << "Indique la accion a realizar: ";
@@ -25,7 +27,7 @@ int main()
         accion = validar_accion_a_realizar(accion);
 
         if (accion == 1){
-            system("cls");
+            rlutil::cls();
             bienvenida(name, calculadora, pilas, aux_pilas, points, round);
         }
 
@@ -33,13 +35,11 @@ int main()
             case 1:
                 cargar_matrix(matrix);
                 //loading(); Descomentar!!!!
-
-
                 while (pilas > 0){
                     round ++;
                     ingresar_coordenadas(coordenadaF, coordenadaC, matrix, pilas, points, name, round);
 
-                    system("cls");
+                    rlutil::cls();
                     mostar_matrix(matrix, pilas, points, name, round);
                     cout<< "Coordenada  seleccionada: " << coordenadaF <<" , " << coordenadaC << endl;
                     cout << endl;
@@ -49,34 +49,38 @@ int main()
                     pilas = validar_posiciones(coordenadaF,  coordenadaC,  desplazamiento,  pilas, matrix);
 
                     if(pilas == aux_pilas){
-                        system("cls");
+                        rlutil::cls();
                         mostar_matrix(matrix, pilas, points, name, round);
                         mostar_info_jugada(coordenadaF, coordenadaC, matrix, desplazamiento);
                         operacion = ingresar_operacion(operacion);
                         usleep(1 * microsecond);
                         points = get_points(points, pilas, matrix, coordenadaF, coordenadaC, desplazamiento, operacion);
-
+                        aux_pilas = pilas;
                     } else {
                         aux_pilas = pilas;
+                        rlutil::setColor(rlutil::RED);
                         cout << "Tu movimiento no es valido. Perdiste una pila." << endl << endl;
+                        rlutil::setColor(rlutil::WHITE);
                     }
 
-                    system("pause");
-                    system("cls");
+                    rlutil::anykey();
+                    rlutil::cls();
                     mostar_matrix(matrix, pilas, points, name, round);
-                  }
+                }
 
-                  cout<<"PERDISTE :(" << endl << endl;
+                rlutil::setColor(rlutil::RED);
+                cout<<"PERDISTE :(" << endl << endl;
+                rlutil::setColor(rlutil::WHITE);
 
-                  if (points > mayor_puntaje){
-                        nombre_mayor_puntaje = name;
-                        mayor_puntaje = points;
-                        cout << "Tu puntaje es el mejor que hemos visto en mucho tiempo." << endl;
-                        cout << "Podras ver tu nombre en nuestras estadisticas." << endl;
-                        cout << "Hasta que alguien te desplace..." << endl << endl;
-                    }
-                  system("pause");
-                  break;
+                if (points > mayor_puntaje){
+                    nombre_mayor_puntaje = name;
+                    mayor_puntaje = points;
+                    cout << "Tu puntaje es el mejor que hemos visto en mucho tiempo." << endl;
+                    cout << "Podras ver tu nombre en nuestras estadisticas." << endl;
+                    cout << "Hasta que alguien te desplace..." << endl << endl;
+                }
+              rlutil::anykey();
+              break;
 
            case 2:
                obtener_mayor_puntaje(nombre_mayor_puntaje, mayor_puntaje);
@@ -87,10 +91,10 @@ int main()
 
           }//end Switch
       }//end While
-      system("cls");
+      rlutil::cls();
       cout << "-----------------------------------" << endl;
       cout<< "     Gracias por jugar a MATHRIX     " << endl;
       cout << "-----------------------------------" << endl;
-      system("pause");
+      rlutil::anykey();
 
 }//end Main
