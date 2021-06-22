@@ -475,7 +475,7 @@ int get_points(int points, int &pilas, char matrix[6][6], int coordenadaF, int c
             num2 = matrix[coordenadaF][newCoor] - '0';
 
             newCoorRes = coordenadaC - 2;
-            result = matrix[coordenadaF][newCoorRes];
+            result = matrix[coordenadaF][newCoorRes] - '0';
             res = do_the_math(num1, num2, operacion);
             cout << num1 << " " << operacion << " " << num2 << " = " << result << endl;
 
