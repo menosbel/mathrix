@@ -7,106 +7,90 @@
 using namespace std;
 unsigned int microsecond = 1000000;
 int accion = 99, coordenadaF = 0, coordenadaC = 0, desplazamiento;
-int pilas = 3, aux_pilas = 3, points = 0;
+int pilas = 3, aux_pilas = 3, points = 0, round = 0;
 char matrix[6][6];
 char operacion = ' ';
+char calculadora[20];
+string name, nombre_mayor_puntaje = "None";
+int mayor_puntaje=0;
 int main()
 {
-    menu();
     while(accion != 0){
-        pilas = 3;
-        aux_pilas = 3;
-        points = 0;
-        cout<< "Indique la accion a realizar: ";
+        system("cls");
+        menu();
+
+        cout << "Indique la accion a realizar: ";
         cin >> accion;
-        accion = validar_accion_a_realizar(accion)
+        cout << endl << endl;
+        accion = validar_accion_a_realizar(accion);
+
+        if (accion == 1){
+            system("cls");
+            bienvenida(name, calculadora, pilas, aux_pilas, points, round);
+        }
 
         switch(accion){
             case 1:
-                  cargar_matrix(matrix);
-                  //loading(); Descomentar!!!!
-                  mostar_matrix(matrix, pilas, points);
+                cargar_matrix(matrix);
+                //loading(); Descomentar!!!!
 
-                  while (pilas > 0){
-                        coordenadaF = ingresar_coordenadaF(coordenadaF);
-                        coordenadaC = ingresar_coordenadaC(coordenadaC);
 
-                        bool valid_movement = false;
-                        while (!valid_movement){
-                            char selected_number = matrix[coordenadaF][coordenadaC];
-                            valid_movement = validar_numero_seleccionado(selected_number);
-                            if (!valid_movement) {
-                                cout << "Coordenada incorrecta" << endl;
-                                coordenadaF = ingresar_coordenadaF(coordenadaF);
-                                coordenadaC = ingresar_coordenadaC(coordenadaC);
-                            }
-                        }
+                while (pilas > 0){
+                    round ++;
+                    ingresar_coordenadas(coordenadaF, coordenadaC, matrix, pilas, points, name, round);
 
+                    system("cls");
+                    mostar_matrix(matrix, pilas, points, name, round);
+                    cout<< "Coordenada  seleccionada: " << coordenadaF <<" , " << coordenadaC << endl;
+                    cout << endl;
+
+                    desplazamiento = ingresar_desplazamiento(coordenadaF,  coordenadaC,  desplazamiento);
+                    usleep(1 * microsecond);
+                    pilas = validar_posiciones(coordenadaF,  coordenadaC,  desplazamiento,  pilas, matrix);
+
+                    if(pilas == aux_pilas){
                         system("cls");
-                        mostar_matrix(matrix, pilas, points);
+                        mostar_matrix(matrix, pilas, points, name, round);
+                        mostar_info_jugada(coordenadaF, coordenadaC, matrix, desplazamiento);
+                        operacion = ingresar_operacion(operacion);
+                        usleep(1 * microsecond);
+                        points = get_points(points, pilas, matrix, coordenadaF, coordenadaC, desplazamiento, operacion);
 
-                        cout<< "Coordenada  seleccionada: " << coordenadaF <<" , " << coordenadaC << endl;
-                        cout << endl;
-                        cout<<"Hacia donde te queres desplazar?" << endl;
-                        instruccion_de_movimiento();
-                        cin>> desplazamiento;
+                    } else {
+                        aux_pilas = pilas;
+                        cout << "Tu movimiento no es valido. Perdiste una pila." << endl << endl;
+                    }
 
-                        desplazamiento = validar_movimiento(desplazamiento);
-                        cout<<"Validando input..." << endl;
-                        usleep(3 * microsecond);
-
-                        pilas = validar_posiciones(coordenadaF,  coordenadaC,  desplazamiento,  pilas, matrix, points);
-
-                        if(pilas == aux_pilas){
-                            system("cls");
-                            mostar_matrix(matrix,pilas,points);
-                            cout<< "Coordenada  seleccionada: " << coordenadaF <<" , " << coordenadaC << endl;
-                            cout << "Numero seleccionado: " << matrix[coordenadaF][coordenadaC] << endl;
-                            string movimiento = traducir_movimiento(desplazamiento);
-                            cout<< "Sentido de desplazamiento: " << movimiento << endl;
-                            cout << endl;
-
-                            instruccion_de_operacion();
-                            cin>> operacion;
-                            operacion = validar_operacion(operacion);
-                            cout<< "Operacion elegida: " << operacion << endl;
-
-                            cout<<"Validando operacion..." << endl;
-                            usleep(3 * microsecond);
-
-                            points = get_points(points, pilas, matrix, coordenadaF, coordenadaC, desplazamiento, operacion);
-
-                        } else {
-                            aux_pilas = pilas;
-                            cout << "Tu movimiento no es valido. Perdiste una pila." << endl;
-                        }
-
-                        system("pause");
-                        system("cls");
-                        mostar_matrix(matrix,pilas,points);
-                        menu();
-                        cout<< "Indique la accion a realizar: ";
-                        cin >> accion;
+                    system("pause");
+                    system("cls");
+                    mostar_matrix(matrix, pilas, points, name, round);
                   }
 
-                  cout<<"PERDISTE :(" << endl;
-                  // Fijarme cuantos puntos hizo y si entra en la lista de puntajes maximos
-                  // Pedirle nombre y guardarlo
+                  cout<<"PERDISTE :(" << endl << endl;
+
+                  if (points > mayor_puntaje){
+                        nombre_mayor_puntaje = name;
+                        mayor_puntaje = points;
+                        cout << "Tu puntaje es el mejor que hemos visto en mucho tiempo." << endl;
+                        cout << "Podras ver tu nombre en nuestras estadisticas." << endl;
+                        cout << "Hasta que alguien te desplace..." << endl << endl;
+                    }
                   system("pause");
-                  system("cls");
-                  menu();
                   break;
 
-           case 2: //Bloque de instrucciones 2;
-                  break;
+           case 2:
+               obtener_mayor_puntaje(nombre_mayor_puntaje, mayor_puntaje);
+               break;
            case 3:
-                  creditos();
-                  break;
+                creditos();
+                break;
 
           }//end Switch
       }//end While
       system("cls");
-      cout<< "Gracias por Jugar" << endl;
+      cout << "-----------------------------------" << endl;
+      cout<< "     Gracias por jugar a MATHRIX     " << endl;
+      cout << "-----------------------------------" << endl;
       system("pause");
 
 }//end Main

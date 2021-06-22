@@ -43,7 +43,7 @@
 	<unistd.h>
 	<stdlib.h>
 
-1624114975 source:c:\users\belen\documents\cursos-dev\utn-labo1\parcial 2\ult version\laboratiorio 1 - segundo parcial\main.cpp
+1624321124 source:c:\users\belen\documents\cursos-dev\utn-labo1\parcial 2\ult version\laboratiorio 1 - segundo parcial\main.cpp
 	<iostream>
 	<windows.h>
 	<stdio.h>
@@ -51,7 +51,7 @@
 	<stdlib.h>
 	"header.h"
 
-1624114973 c:\users\belen\documents\cursos-dev\utn-labo1\parcial 2\ult version\laboratiorio 1 - segundo parcial\header.h
+1624321422 c:\users\belen\documents\cursos-dev\utn-labo1\parcial 2\ult version\laboratiorio 1 - segundo parcial\header.h
 	<iostream>
 	<stdio.h>
 	<conio.h>
@@ -59,7 +59,7 @@
 	<unistd.h>
 	<windows.h>
 
-1624114001 source:c:\users\belen\documents\cursos-dev\utn-labo1\parcial 2\ult version\laboratiorio 1 - segundo parcial\functions.cpp
+1624321196 source:c:\users\belen\documents\cursos-dev\utn-labo1\parcial 2\ult version\laboratiorio 1 - segundo parcial\functions.cpp
 	<iostream>
 	<stdio.h>
 	<unistd.h>

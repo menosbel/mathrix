@@ -9,10 +9,27 @@
 #include "header.h"
 using namespace std;
 
+void bienvenida(string &name, char calculadora[20], int pilas, int aux_pilas, int points, int round){
+    pilas = 3;
+    aux_pilas = 3;
+    points = 0;
+    round = 0;
+    cout << endl;
+    cout << "Ingresa tu nombre: ";
+    cin >> name;
+    cout << "Modelo favorito de calculadora: ";
+    cin >> calculadora;
+    system("cls");
+    cout << "Hola, " << name << endl << endl;
+    cout << "-----------------------------------" << endl;
+    cout << "       Bienvenidx a MATHRIX        " << endl;
+    cout << "-----------------------------------" << endl << endl;
+    cout << "Let the game begin..." << endl << endl;
+    system("pause");
+}
 
 
-int menu()
-{
+void menu(){
     cout<< " "                    << endl;
     cout<<" MATHRIX"              << endl;
     cout<<" --------------------" << endl;
@@ -24,7 +41,22 @@ int menu()
     cout<< " "                   << endl;
 }
 
-int creditos(){
+
+void obtener_mayor_puntaje(string nombre_mayor_puntaje, int mayor_puntaje){
+    if (mayor_puntaje != 0){
+        cout << "---------------------------------------------" << endl;
+        cout << "   Mayor puntaje en la historia de MATHRIX   " << endl;
+        cout << "---------------------------------------------" << endl << endl;
+        cout << "Nombre: " << nombre_mayor_puntaje << "      Puntaje: " << mayor_puntaje << endl;
+    } else {
+        cout << "Nadie ha logrado hacer puntos en MATHRIX aun." << endl;
+        cout << "Animate a intentarlo..." << endl << endl;
+    }
+    system("pause");
+}
+
+
+void creditos(){
     system("cls");
     cout << " Equipo - Los caballeros del Zoodiaco"     << endl;
     cout << " Los integrantes de este equipo son: "    << endl;
@@ -38,6 +70,7 @@ int creditos(){
     menu();
 }
 
+
 int cargar_matrix(char matrix[6][6]){
     const char ab[11]= { "0123456789" };
     srand (time(NULL)); // Reboot Random Generator
@@ -49,10 +82,12 @@ int cargar_matrix(char matrix[6][6]){
 }
 
 
-int mostar_matrix(char matrix[6][6],int pilas, int points){
+int mostar_matrix(char matrix[6][6],int pilas, int points, string name, int round){
     bool first = true;
     int line = 1;
     system("cls");
+    cout<< " Jugador/a: " << name << endl;
+    cout<< " Ronda: " << round << endl;
     cout<< " Pilas: "  << pilas << endl;
     cout<< " Puntos: " << points << endl;
 
@@ -79,6 +114,7 @@ int mostar_matrix(char matrix[6][6],int pilas, int points){
 
 }
 
+
 int loading(){
  	int i = 0;
  	char load[26];
@@ -96,16 +132,37 @@ int loading(){
  printf("\n");
 }
 
+
 int validar_accion_a_realizar(int accion){
-    int acciones[5] = {1, 2, 3, 0};
+    int acciones[4] = {1, 2, 3, 0};
     bool exists = std::find(std::begin(acciones), std::end(acciones), accion) != std::end(acciones);
 
     while(!exists){
         cout<<"Accion invalida. Ingrese otra: ";
-        cin>>operacion;
-        bool exists = std::find(std::begin(acciones), std::end(acciones), accion) != std::end(acciones);
+        cin>>accion;
+        exists = std::find(std::begin(acciones), std::end(acciones), accion) != std::end(acciones);
     }
     return accion;
+}
+
+
+void ingresar_coordenadas(int &coordenadaF, int &coordenadaC, char matrix[6][6], int &pilas, int points, string name, int round){
+    mostar_matrix(matrix, pilas, points, name, round);
+    coordenadaF = ingresar_coordenadaF(coordenadaF);
+    coordenadaC = ingresar_coordenadaC(coordenadaC);
+
+    bool valid_number = false;
+    while (!valid_number){
+        char selected_number = matrix[coordenadaF][coordenadaC];
+        valid_number = validar_numero_seleccionado(selected_number);
+        if (!valid_number) {
+            cout << "No podes seleccionar una coordenada con una X. Perdes una pila" << endl << endl;
+            pilas --;
+            system("pause");
+            system("cls");
+            ingresar_coordenadas(coordenadaF, coordenadaC, matrix, pilas, points, name, round);
+        }
+    }
 }
 
 
@@ -138,19 +195,38 @@ int validar_coordenada(int coordenada){
 bool validar_numero_seleccionado(int number){
     if(number != 'X') {
         return true;
-    } else {
+    } else if(number == 'X'){
         return false;
     }
 }
 
-int instruccion_de_movimiento(){
+void instruccion_de_desplazamiento(){
     cout<<"8 - Arriba"<<endl;
     cout<<"2 - Abajo"<<endl;
     cout<<"4 - Izquierda"<<endl;
     cout<<"6 - Derecha"<<endl;
 }
 
-int instruccion_de_operacion(){
+int ingresar_desplazamiento(int coordenadaF,  int coordenadaC,  int desplazamiento){
+    cout<<"Hacia donde te queres mover?" << endl;
+    instruccion_de_desplazamiento();
+    cin>> desplazamiento;
+    desplazamiento = validar_movimiento(desplazamiento);
+    cout<<"Validando input..." << endl;
+    return desplazamiento;
+}
+
+char ingresar_operacion(char operacion){
+    instruccion_de_operacion();
+    cin>> operacion;
+    operacion = validar_operacion(operacion);
+    cout<< "Operacion elegida: " << operacion << endl;
+    cout<<"Validando operacion..." << endl;
+    return operacion;
+}
+
+
+void instruccion_de_operacion(){
     cout<<"Suma               -> +"<<endl;
     cout<<"Resta              -> -"<<endl;
     cout<<"Multiplicacion     -> *"<<endl;
@@ -158,8 +234,8 @@ int instruccion_de_operacion(){
     cout<<"Division(Resto)    -> %"<<endl;
 }
 
-string traducir_movimiento(char movimiento){
-    switch(movimiento){
+string traducir_desplazamiento(int desplazamiento){
+    switch(desplazamiento){
         case 8:
             return "Arriba";
         case 2:
@@ -171,28 +247,31 @@ string traducir_movimiento(char movimiento){
     }
 }
 
+void mostar_info_jugada(int coordenadaF, int coordenadaC, char matrix[6][6], int desplazamiento){
+    cout<< "Coordenada  seleccionada: " << coordenadaF <<" , " << coordenadaC << endl;
+    cout << "Numero seleccionado: " << matrix[coordenadaF][coordenadaC] << endl;
+    string desplazamiento_words = traducir_desplazamiento(desplazamiento);
+    cout<< "Sentido de desplazamiento: " << desplazamiento_words << endl << endl;
+}
 
-int validar_posiciones(int coordenadaF, int coordenadaC, int desplazamiento, int pilas,char matrix[6][6], int points){
+
+int validar_posiciones(int coordenadaF, int coordenadaC, int desplazamiento, int pilas, char matrix[6][6]){
     string value;
-    int newF=0,newC=0,acum=0,acum_aux=0;
+    int newF=0, newC=0, acum=0, acum_aux=0;
     bool good_move = true;
     value = matrix[coordenadaF][coordenadaC];
 
     switch (desplazamiento){
         case 8:
-            //first move [x-1][y]
-            newF=coordenadaF - 1;
+            newF = coordenadaF - 1;
             value = matrix[newF][coordenadaC];
 
-            if(newF == '\0' || value == "X"){
+            if(newF > 6 || newF < 1 || value == "X"){
                 good_move = false;
-            }
-
-            if(good_move){
-                //Second move [x-2][y]
-                newF=newF-1;
+            } else {
+                newF = coordenadaF - 2;
                 value = matrix[newF][coordenadaC];
-                if( newF == '\0' || value == "X"){
+                if( newF > 6 || newF < 1 || value == "X"){
                     good_move = false;
                 }
             }
@@ -200,23 +279,20 @@ int validar_posiciones(int coordenadaF, int coordenadaC, int desplazamiento, int
             if(!good_move){
                 pilas--;
             }
+
             return pilas;
             break;
 
         case 2:
-            //first move [x+1][y]
             newF = coordenadaF + 1;
             value = matrix[newF][coordenadaC];
 
-            if( newF == '\0' || value == "X"){
+            if(newF > 6 || newF < 1 || value == "X"){
                 good_move = false;
-            }
-
-            if(good_move == true){
-                //Second move [x+2][y]
-                newF = newF + 1;
+            } else {
+                newF = coordenadaF + 2;
                 value = matrix[newF][coordenadaC];
-                if( newF == '\0' || value == "X"){
+                if(newF > 6 || newF < 1 || value == "X"){
                     good_move = false;
                 }
             }
@@ -229,19 +305,15 @@ int validar_posiciones(int coordenadaF, int coordenadaC, int desplazamiento, int
             break;
 
         case 4:
-            //First move [x][y-1]
             newC = coordenadaC - 1;
             value = matrix[coordenadaF][newC];
 
-            if( newC == '\0' || value == "X"){
+            if(newC > 6 || newC < 1 || value == "X"){
                 good_move = false;
-            }
-
-            if(good_move == true){
-                //Second move [x][y-2]
-                newC = newC - 1;
+            } else {
+                newC = coordenadaC - 2;
                 value = matrix[coordenadaF][newC];
-                if( newC == '\0' || value == "X"){
+                if(newC > 6 || newC < 1 || value == "X"){
                     good_move = false;
                 }
             }
@@ -254,19 +326,14 @@ int validar_posiciones(int coordenadaF, int coordenadaC, int desplazamiento, int
             break;
 
         case 6:
-            //First move [x][y+1]
-            newC=coordenadaC + 1;
+            newC = coordenadaC + 1;
             value = matrix[coordenadaF][newC];
-
-            if( newC == '\0' || value == "X"){
+            if(newC > 6 || newC < 1 || value == "X"){
                 good_move = false;
-            }
-
-            if(good_move == true){
-                //Second move [x][y-2]
-                newC = newC + 1;
+            } else {
+                newC = coordenadaC + 2;
                 value = matrix[coordenadaF][newC];
-                if( newC == '\0' || value == "X"){
+                if(newC > 6 || newC < 1 || value == "X"){
                     good_move = false;
                 }
             }
@@ -314,18 +381,21 @@ int resto(int num1, int num2){
 int do_the_math(int num1, int num2, char operacion){
     int res=0;
     switch(operacion){
-    case '+':
-        res = suma(num1, num2);
-        break;
-    case '-':
-        res = resta(num1, num2);
-        break;
-    case '*':
-        res = multiplicacion(num1, num2);
-    case '/':
-        res = division(num1, num2);
-    case '%':
-        res = resto(num1, num2);
+        case '+':
+            res = suma(num1, num2);
+            break;
+        case '-':
+            res = resta(num1, num2);
+            break;
+        case '*':
+            res = multiplicacion(num1, num2);
+            break;
+        case '/':
+            res = division(num1, num2);
+            break;
+        case '%':
+            res = resto(num1, num2);
+            break;
     }
     return res;
 }
@@ -344,17 +414,19 @@ int get_points(int points, int &pilas, char matrix[6][6], int coordenadaF, int c
 
             newCoorRes=coordenadaF - 2;
             result = matrix[newCoorRes][coordenadaC] - '0';
-
             res = do_the_math(num1, num2, operacion);
+            cout << num1 << " " << operacion << " " << num2 << " = " << result << endl;
 
             if (result == res){
                 matrix[coordenadaF][coordenadaC] = 'X';
                 matrix[newCoor][coordenadaC] = 'X';
                 matrix[newCoorRes][coordenadaC] = 'X';
                 points = acum + num1 + num2 + result;
-                cout << "El resultado es correcto. Sumaste " << points << " puntos!" << endl;
+                int points_round;
+                points_round = points - acum;
+                cout << "El resultado es correcto. Sumaste " << points_round << " puntos!" << endl << endl;
             } else {
-                cout << "Resultado incorrecto. Perdieste una pila" << endl;
+                cout << "Resultado incorrecto. Perdiste una pila" << endl << endl;
                 pilas --;
             }
 
@@ -367,16 +439,19 @@ int get_points(int points, int &pilas, char matrix[6][6], int coordenadaF, int c
 
             newCoorRes=coordenadaF + 2;
             result = matrix[newCoorRes][coordenadaC] - '0';
-
             res = do_the_math(num1, num2, operacion);
+            cout << num1 << " " << operacion << " " << num2 << " = " << result << endl;
 
             if (result == res){
                 matrix[coordenadaF][coordenadaC] = 'X';
                 matrix[newCoor][coordenadaC] = 'X';
                 matrix[newCoorRes][coordenadaC] = 'X';
                 points = acum + num1 + num2 + result;
+                int points_round;
+                points_round = points - acum;
+                cout << "El resultado es correcto. Sumaste " << points_round << " puntos!" << endl << endl;
             } else {
-                cout << "Resultado incorrecto. Perdiste una pila" << endl;
+                cout << "Resultado incorrecto. Perdiste una pila." << endl << endl;
                 pilas --;
             }
 
@@ -389,16 +464,19 @@ int get_points(int points, int &pilas, char matrix[6][6], int coordenadaF, int c
 
             newCoorRes = coordenadaC - 2;
             result = matrix[coordenadaF][newCoorRes];
-
             res = do_the_math(num1, num2, operacion);
+            cout << num1 << " " << operacion << " " << num2 << " = " << result << endl;
 
             if (result == res){
                 matrix[coordenadaF][coordenadaC] = 'X';
                 matrix[coordenadaF][newCoor] = 'X';
                 matrix[coordenadaF][newCoorRes] = 'X';
                 points = acum + num1 + num2 + result;
+                int points_round;
+                points_round = points - acum;
+                cout << "El resultado es correcto. Sumaste " << points_round << " puntos!" << endl << endl;
             } else {
-                cout << "Resultado incorrecto. Perdiste una pila" << endl;
+                cout << "Resultado incorrecto. Perdiste una pila." << endl << endl;
                 pilas --;
             }
 
@@ -411,16 +489,19 @@ int get_points(int points, int &pilas, char matrix[6][6], int coordenadaF, int c
 
             newCoorRes = coordenadaC + 2;
             result = matrix[coordenadaF][newCoorRes] - '0';
-
             res = do_the_math(num1, num2, operacion);
+            cout << num1 << " " << operacion << " " << num2 << " = " << result << endl;
 
             if(result == res){
                 matrix[coordenadaF][coordenadaC] = 'X';
                 matrix[coordenadaF][newCoor] = 'X';
                 matrix[coordenadaF][newCoorRes] = 'X';
                 points = acum + num1 + num2 + result;
+                int points_round;
+                points_round = points - acum;
+                cout << "El resultado es correcto. Sumaste " << points_round << " puntos!" << endl << endl;
             } else {
-                cout << "Resultado incorrecto. Perdiste una pila" << endl;
+                cout << "Resultado incorrecto. Perdiste una pila." << endl << endl;
                 pilas --;
             }
 
@@ -435,8 +516,8 @@ int validar_movimiento(int desplazamiento){
     bool exists = std::find(std::begin(desplazamientos), std::end(desplazamientos), desplazamiento) != std::end(desplazamientos);
 
     while(!exists){
-        cout<<"Ingrese una direccion de desplazamiento valida: ";
-        cin>>desplazamiento;
+        cout << "Ingrese una direccion de desplazamiento valida: ";
+        cin >> desplazamiento;
         cout << endl;
         exists = std::find(std::begin(desplazamientos), std::end(desplazamientos), desplazamiento) != std::end(desplazamientos);
      }
@@ -451,7 +532,7 @@ char validar_operacion(char operacion){
     while(!exists){
         cout<<"Ingrese nuevamente la operacion" << endl;
         cin>>operacion;
-        bool exists = std::find(std::begin(operaciones), std::end(operaciones), operacion) != std::end(operaciones);
+        exists = std::find(std::begin(operaciones), std::end(operaciones), operacion) != std::end(operaciones);
     }
     return operacion;
 }
